@@ -1,0 +1,5 @@
+- Cài đặt NodeJS: https://nodejs.org/en
+- Mở CMD và cài đặt yarn: "npm i -g yarn"
+- Mở CMD đúng thư mục hiện hành và nhập lệnh sau để cài đặt: "yarn install"
+- Khởi chạy server: "yarn start:dev"
+- Truy cập: http://localhost:3000 sau khi khởi chạy
