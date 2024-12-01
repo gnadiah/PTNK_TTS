@@ -40,6 +40,18 @@ fromText.addEventListener("input", (e) => {
     const text = numberToWordsEng(fromText.value);
     transText.value = text;
   }
+  else if(langOption[0].value == "fr") {
+    const text = numberToWordsFr(fromText.value);
+    transText.value = text;
+  }
+  else if(langOption[0].value == "es") {
+    const text = numberToWordsEs(fromText.value);
+    transText.value = text;
+  }
+  else if(langOption[0].value == "zh") {
+    const text = numberToWordsZh(fromText.value);
+    transText.value = text;
+  }
 })
 
 // Catching TTS
@@ -59,9 +71,9 @@ toVoice.addEventListener("click", async () => {
 })
 
 cpyBtn.addEventListener("click", function () {
-  navigate.clipboard.writeText(transText.value);
+  navigator.clipboard.writeText(transText.value);
 });
 
 fromText.addEventListener("keyup", function () {
-  countValue.innerHTML = `${fromText.value.length}/5,000`;
+  countValue.innerHTML = `${fromText.value.length}/18`;
 });

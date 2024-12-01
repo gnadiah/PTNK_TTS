@@ -109,5 +109,90 @@ function numberToWordsEng(n) {
       }
   }
 
-  return result.trim().charAt(0).toUpperCase() + result.trim().slice(1);
+  return result.trim().charAt(0).toLowerCase() + result.trim().slice(1);
+}
+
+function numberToWordsFr(n) {
+  const ones = ['', 'un', 'deux', 'trois', 'quatre', 'cinq', 'six', 'sept', 'huit', 'neuf', 'dix',
+                'onze', 'douze', 'treize', 'quatorze', 'quinze', 'seize', 'dix-sept', 'dix-huit', 'dix-neuf'];
+  const tens = ['', '', 'vingt', 'trente', 'quarante', 'cinquante', 'soixante', 'soixante-dix', 'quatre-vingt'];
+  const scales = ['', 'mille', 'million', 'milliard'];
+
+  function convertGroup(n) {
+    let result = '';
+    if (n >= 100) {
+      const hundreds = Math.floor(n / 100);
+      result += (hundreds > 1 ? ones[hundreds] + ' ' : '') + 'cent ';
+      n %= 100;
+    }
+    if (n >= 20) {
+      const remainder = n % 10;
+      if (n >= 70 && n < 80) result += 'soixante-' + ones[10 + remainder];
+      else if (n >= 90) result += 'quatre-vingt-' + ones[10 + remainder];
+      else result += tens[Math.floor(n / 10)] + (remainder ? '-' + ones[remainder] : '');
+    } else result += ones[n];
+    return result.trim();
+  }
+
+  return processGroups(n, convertGroup, scales);
+}
+
+function numberToWordsEs(n) {
+  const ones = ['', 'uno', 'dos', 'tres', 'cuatro', 'cinco', 'seis', 'siete', 'ocho', 'nueve', 'diez',
+                'once', 'doce', 'trece', 'catorce', 'quince', 'dieciséis', 'diecisiete', 'dieciocho', 'diecinueve'];
+  const tens = ['', '', 'veinte', 'treinta', 'cuarenta', 'cincuenta', 'sesenta', 'setenta', 'ochenta', 'noventa'];
+  const scales = ['', 'mil', 'millón', 'mil millones'];
+
+  function convertGroup(n) {
+    let result = '';
+    if (n >= 100) {
+      const hundreds = Math.floor(n / 100);
+      result += hundreds === 1 ? 'cien' : ones[hundreds] + 'cientos';
+      n %= 100;
+    }
+    if (n >= 20) {
+      result += tens[Math.floor(n / 10)];
+      if (n % 10 > 0) result += ' y ' + ones[n % 10];
+    } else result += ones[n];
+    return result.trim();
+  }
+
+  return processGroups(n, convertGroup, scales);
+}
+
+function numberToWordsZh(n) {
+  const ones = ['', '一', '二', '三', '四', '五', '六', '七', '八', '九'];
+  const tens = ['', '十', '百', '千'];
+  const scales = ['', '万', '亿'];
+
+  function convertGroup(n) {
+    const strNum = n.toString();
+    let result = '';
+    for (let i = 0; i < strNum.length; i++) {
+      const digit = parseInt(strNum[i]);
+      if (digit !== 0) {
+        result += ones[digit] + (tens[strNum.length - i - 1] || '');
+      } else if (!result.endsWith('零')) {
+        result += '零';
+      }
+    }
+    return result.replace(/零+$/, '');
+  }
+
+  return processGroups(n, convertGroup, scales);
+}
+
+// Grouping Logic Embedded in Each Function
+function processGroups(n, convertGroup, scales) {
+  n = n.toString().padStart(Math.ceil(n.toString().length / 3) * 3, '0');
+  const groups = n.match(/\d{3}/g);
+  let result = '';
+  for (let i = 0; i < groups.length; i++) {
+    const groupNum = parseInt(groups[i]);
+    if (groupNum !== 0) {
+      if (result) result += ' ';
+      result += convertGroup(groupNum) + ' ' + scales[groups.length - i - 1];
+    }
+  }
+  return result.trim();
 }
